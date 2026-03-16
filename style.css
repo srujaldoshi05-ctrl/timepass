@@ -108,27 +108,35 @@ button:active{
   background: #4361ee;
 }
 
-/* phone responsive */
 @media (max-width: 480px) {
   body {
     height: 100dvh; 
     display: flex;
     flex-direction: column;
-    /* Changed from flex-end to center to provide space at the top */
-    justify-content: center; 
-    padding: 20px; /* Adds space around the calculator on small screens */
+    /* This ensures the calculator sits at the bottom but honors padding */
+    justify-content: flex-end; 
+    padding: 0;
     margin: 0;
+    background: #1e1e2f;
   }
 
   .calculator {
     width: 100%;
+    /* REMOVED height: 100% to prevent it from covering the whole screen */
+    
     max-width: none;
-    /* Kept your rounded corners but added bottom ones back for the "floating" look */
-    border-radius: 24px; 
+    /* Rounded top corners look best when pinned to bottom */
+    border-radius: 24px 24px 0 0; 
     padding: 20px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-    /* Safe area bottom still included for display comfort */
-    margin-bottom: env(safe-area-inset-bottom);
+    
+    /* This creates the 'gap' at the top by ensuring the calculator 
+       doesn't sit higher than a certain point */
+    margin-top: 40px; 
+    
+    /* Handles the bottom home-bar on modern phones */
+    padding-bottom: calc(20px + env(safe-area-inset-bottom));
+    
+    box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.5);
   }
 
   #screen {
@@ -137,8 +145,12 @@ button:active{
     margin-bottom: 20px;
   }
 
+  .buttons {
+    gap: 12px;
+  }
+
   button {
-    height: 70px;
+    height: 75px;
     font-size: 24px;
   }
 }
