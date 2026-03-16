@@ -1,0 +1,159 @@
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:system-ui;
+}
+
+body{
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:#1e1e2f;
+}
+
+/* calculator */
+
+.calculator{
+width:320px;
+background:#2c2c3e;
+padding:20px;
+border-radius:16px;
+box-shadow:0 10px 25px rgba(0,0,0,0.4);
+}
+
+/* display */
+
+.display{
+margin-bottom:15px;
+}
+
+#history{
+color:#9ca3af;
+font-size:13px;
+text-align:right;
+margin-bottom:5px;
+height:16px;
+}
+
+#screen{
+width:100%;
+height:55px;
+border:none;
+outline:none;
+background:#3b3b50;
+border-radius:10px;
+color:white;
+font-size:26px;
+text-align:right;
+padding:10px;
+}
+
+/* grid */
+
+.buttons{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:10px;
+}
+
+/* buttons */
+
+button{
+height:55px;
+border:none;
+border-radius:10px;
+background:#3b3b50;
+color:white;
+font-size:18px;
+cursor:pointer;
+transition:0.2s;
+}
+
+button:hover{
+background:#50506b;
+}
+
+button:active{
+transform:scale(0.95);
+}
+
+/* operators */
+
+.operator{
+background:#ff9f1c;
+}
+
+.operator:hover{
+background:#ffb347;
+}
+
+/* equal */
+
+.equal{
+background:#2ec4b6;
+grid-row:span 2;
+}
+
+.equal:hover{
+background:#3dd9c8;
+}
+
+/* clear */
+
+.clear{
+background:#e63946;
+}
+
+.clear:hover{
+background:#ff5964;
+}
+
+/* delete */
+
+.delete{
+background:#4361ee;
+}
+#screen{
+caret-color: transparent;
+}
+/* phone responsive */
+
+@media (max-width:480px){
+
+body{
+align-items:flex-end;
+padding:0;
+}
+
+/* calculator fills screen width */
+
+.calculator{
+width:100%;
+max-width:none;
+border-radius:20px 20px 0 0;
+padding:15px;
+}
+
+/* display larger for phone */
+
+#screen{
+height:70px;
+font-size:32px;
+}
+
+/* bigger touch buttons */
+
+button{
+height:75px;
+font-size:22px;
+}
+
+/* tighter grid spacing */
+
+.buttons{
+gap:8px;
+}
+
+}
