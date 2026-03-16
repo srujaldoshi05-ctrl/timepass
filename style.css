@@ -156,4 +156,42 @@ font-size:22px;
 gap:8px;
 }
 
+}@media (max-width: 480px) {
+  /* Fix the body to fill the dynamic screen height */
+  body {
+    height: 100dvh; 
+    align-items: flex-end; /* Push calculator to the bottom */
+    padding: 0;
+    margin: 0;
+    overflow: hidden; /* Prevent accidental scrolling */
+  }
+
+  /* Make the calculator a full-width bottom sheet */
+  .calculator {
+    width: 100%;
+    max-width: none;
+    border-radius: 24px 24px 0 0; /* Rounded top corners only */
+    
+    /* Extra padding at the bottom for iPhones/Android home bars */
+    padding: 20px 20px calc(20px + env(safe-area-inset-bottom));
+    
+    box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.3);
+  }
+
+  /* Scale up elements for better touch targets */
+  #screen {
+    height: 80px;
+    font-size: 36px;
+    margin-bottom: 20px;
+  }
+
+  .buttons {
+    gap: 12px;
+  }
+
+  button {
+    height: 70px; /* Taller buttons for thumbs */
+    font-size: 24px;
+    border-radius: 12px;
+  }
 }
