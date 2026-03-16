@@ -1,163 +1,144 @@
 *{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:system-ui;
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:system-ui;
 }
 
 body{
-height:100vh;
-display:flex;
-justify-content:center;
-align-items:center;
-background:#1e1e2f;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #1e1e2f;
 }
 
 /* calculator */
-
 .calculator{
-width:320px;
-background:#2c2c3e;
-padding:20px;
-border-radius:16px;
-box-shadow:0 10px 25px rgba(0,0,0,0.4);
+  width: 320px;
+  background: #2c2c3e;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.4);
 }
 
 /* display */
-
 .display{
-margin-bottom:15px;
+  margin-bottom: 15px;
 }
 
 #history{
-color:#9ca3af;
-font-size:13px;
-text-align:right;
-margin-bottom:5px;
-height:16px;
+  color: #9ca3af;
+  font-size: 13px;
+  text-align: right;
+  margin-bottom: 5px;
+  height: 16px;
 }
 
 #screen{
-width:100%;
-height:55px;
-border:none;
-outline:none;
-background:#3b3b50;
-border-radius:10px;
-color:white;
-font-size:26px;
-text-align:right;
-padding:10px;
+  width: 100%;
+  height: 55px;
+  border: none;
+  outline: none;
+  background: #3b3b50;
+  border-radius: 10px;
+  color: white;
+  font-size: 26px;
+  text-align: right;
+  padding: 10px;
+  caret-color: transparent;
 }
 
 /* grid */
-
 .buttons{
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:10px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
 }
 
 /* buttons */
-
 button{
-height:55px;
-border:none;
-border-radius:10px;
-background:#3b3b50;
-color:white;
-font-size:18px;
-cursor:pointer;
-transition:0.2s;
+  height: 55px;
+  border: none;
+  border-radius: 10px;
+  background: #3b3b50;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+  transition: 0.2s;
 }
 
 button:hover{
-background:#50506b;
+  background: #50506b;
 }
 
 button:active{
-transform:scale(0.95);
+  transform: scale(0.95);
 }
 
 /* operators */
-
 .operator{
-background:#ff9f1c;
+  background: #ff9f1c;
 }
 
 .operator:hover{
-background:#ffb347;
+  background: #ffb347;
 }
 
 /* equal */
-
 .equal{
-background:#2ec4b6;
-grid-row:span 2;
+  background: #2ec4b6;
+  grid-row: span 2;
 }
 
 .equal:hover{
-background:#3dd9c8;
+  background: #3dd9c8;
 }
 
 /* clear */
-
 .clear{
-background:#e63946;
+  background: #e63946;
 }
 
 .clear:hover{
-background:#ff5964;
+  background: #ff5964;
 }
-
-/* delete */
 
 .delete{
-background:#4361ee;
+  background: #4361ee;
 }
-#screen{
-caret-color: transparent;
-}
+
 /* phone responsive */
-
-
-
-}@media (max-width: 480px) {
-  /* Fix the body to fill the dynamic screen height */
+@media (max-width: 480px) {
   body {
     height: 100dvh; 
-    align-items: flex-end; /* Push calculator to the bottom */
-    padding: 0;
+    display: flex;
+    flex-direction: column;
+    /* Changed from flex-end to center to provide space at the top */
+    justify-content: center; 
+    padding: 20px; /* Adds space around the calculator on small screens */
     margin: 0;
-    overflow: hidden; /* Prevent accidental scrolling */
   }
 
-  /* Make the calculator a full-width bottom sheet */
   .calculator {
     width: 100%;
     max-width: none;
-    border-radius: 24px 24px 0 0; /* Rounded top corners only */
-    
-    /* Extra padding at the bottom for iPhones/Android home bars */
-    padding: 20px 20px calc(20px + env(safe-area-inset-bottom));
-    
-    box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.3);
+    /* Kept your rounded corners but added bottom ones back for the "floating" look */
+    border-radius: 24px; 
+    padding: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    /* Safe area bottom still included for display comfort */
+    margin-bottom: env(safe-area-inset-bottom);
   }
 
-  /* Scale up elements for better touch targets */
   #screen {
     height: 80px;
     font-size: 36px;
     margin-bottom: 20px;
   }
 
-  .buttons {
-    gap: 12px;
-  }
-
   button {
-    height: 70px; /* Taller buttons for thumbs */
+    height: 70px;
     font-size: 24px;
-    border-radius: 12px;
   }
 }
