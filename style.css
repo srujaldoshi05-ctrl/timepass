@@ -120,41 +120,7 @@ caret-color: transparent;
 }
 /* phone responsive */
 
-@media (max-width:480px){
 
-body{
-align-items:flex-end;
-padding:0;
-}
-
-/* calculator fills screen width */
-
-.calculator{
-width:100%;
-max-width:none;
-border-radius:20px 20px 0 0;
-padding:15px;
-}
-
-/* display larger for phone */
-
-#screen{
-height:70px;
-font-size:32px;
-}
-
-/* bigger touch buttons */
-
-button{
-height:75px;
-font-size:22px;
-}
-
-/* tighter grid spacing */
-
-.buttons{
-gap:8px;
-}
 
 }@media (max-width: 480px) {
   /* Fix the body to fill the dynamic screen height */
