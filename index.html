@@ -1,52 +1,139 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Calculator</title>
-<link rel="stylesheet" href="style.css">
+    <title>Private Chat</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: #1e1e2f;
+            color: white;
+            text-align: center;
+        }
+
+        table {
+            margin: 20px auto;
+            border-collapse: collapse;
+            width: 300px;
+            background: #2c2c3e;
+        }
+
+        th, td {
+            border: 1px solid #444;
+            padding: 8px;
+        }
+
+        #chat {
+            width: 300px;
+            height: 200px;
+            margin: 20px auto;
+            overflow-y: auto;
+            background: #2c2c3e;
+            padding: 10px;
+            list-style: none;
+        }
+
+        input {
+            padding: 8px;
+            margin: 5px;
+            width: 200px;
+        }
+
+        button {
+            padding: 10px;
+            background: #4caf50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
 
-<div class="calculator">
+<h2>👥 Connected Users (Max 5)</h2>
 
-<div class="display">
-<div id="history"></div>
-<input type="text" id="screen" readonly>
+<table>
+    <thead>
+        <tr><th>Users</th></tr>
+    </thead>
+    <tbody id="userTable"></tbody>
+</table>
+
+<ul id="chat"></ul>
+
+<div>
+    <input id="username" placeholder="Your name"><br>
+    <input id="target" placeholder="Send to (username)"><br>
+    <input id="message" placeholder="Message"><br>
+
+    <button onclick="connect()">Connect</button>
+    <button onclick="sendMessage()">Send</button>
 </div>
 
-<div class="buttons">
+<script>
+let ws;
 
-<button class="clear">C</button>
-<button class="delete">DEL</button>
-<button class="operator">%</button>
-<button class="operator">/</button>
+// 🔥 CHANGE THIS EVERY TIME YOU RUN NGROK
+const BASE_URL = "https://lynsey-jolliest-immaturely.ngrok-free.dev/";
 
-<button>7</button>
-<button>8</button>
-<button>9</button>
-<button class="operator">*</button>
+function connect() {
+    const username = document.getElementById("username").value;
 
-<button>4</button>
-<button>5</button>
-<button>6</button>
-<button class="operator">-</button>
+    if (!username) {
+        alert("Enter username");
+        return;
+    }
 
-<button>1</button>
-<button>2</button>
-<button>3</button>
-<button class="operator">+</button>
+    ws = new WebSocket(`${BASE_URL}/ws/${username}`);
 
-<button class="zero">0</button>
-<button class="zero">00</button>
-<button>.</button>
-<button class="equal">=</button>
+    ws.onmessage = (event) => {
+        try {
+            const data = JSON.parse(event.data);
 
-</div>
+            if (data.type === "users") {
+                const table = document.getElementById("userTable");
+                table.innerHTML = "";
 
-</div>
+                data.users.forEach(user => {
+                    const row = document.createElement("tr");
+                    const cell = document.createElement("td");
+                    cell.textContent = user;
+                    row.appendChild(cell);
+                    table.appendChild(row);
+                });
+            }
 
-<script src="index.js"></script>
+        } catch {
+            const li = document.createElement("li");
+            li.textContent = event.data;
+            document.getElementById("chat").appendChild(li);
+        }
+    };
+
+    ws.onclose = () => {
+        alert("Disconnected or server full");
+    };
+}
+
+function sendMessage() {
+    const from = document.getElementById("username").value;
+    const to = document.getElementById("target").value;
+    const message = document.getElementById("message").value;
+
+    if (!to || !message) {
+        alert("Enter target and message");
+        return;
+    }
+
+    ws.send(JSON.stringify({
+        from,
+        to,
+        message
+    }));
+
+    document.getElementById("message").value = "";
+}
+</script>
 
 </body>
 </html>
