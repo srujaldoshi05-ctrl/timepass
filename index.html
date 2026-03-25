@@ -1,80 +1,167 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Private Chat</title>
+    <title>Chat App</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <style>
+        * {
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:system-ui;
+        }
+
         body {
-            font-family: Arial;
-            background: #1e1e2f;
-            color: white;
-            text-align: center;
+            height:100vh;
+            background:#0f172a;
+            display:flex;
+            justify-content:center;
+            align-items:center;
         }
 
-        table {
-            margin: 20px auto;
-            border-collapse: collapse;
-            width: 300px;
-            background: #2c2c3e;
+        .app {
+            width:100%;
+            max-width:700px;
+            height:100vh;
+            background:#111827;
+            display:flex;
+            flex-direction:column;
         }
 
-        th, td {
-            border: 1px solid #444;
-            padding: 8px;
+        /* HEADER */
+        .header {
+            display:flex;
+            gap:8px;
+            padding:10px;
+            background:#1f2937;
         }
 
-        #chat {
-            width: 300px;
-            height: 200px;
-            margin: 20px auto;
-            overflow-y: auto;
-            background: #2c2c3e;
-            padding: 10px;
-            list-style: none;
+        .header input {
+            flex:1;
+            padding:10px;
+            border:none;
+            border-radius:6px;
         }
 
-        input {
-            padding: 8px;
-            margin: 5px;
-            width: 200px;
+        .header button {
+            padding:10px;
+            background:#22c55e;
+            border:none;
+            color:white;
+            border-radius:6px;
+            cursor:pointer;
         }
 
-        button {
-            padding: 10px;
-            background: #4caf50;
-            color: white;
-            border: none;
-            cursor: pointer;
+        /* USERS */
+        .users {
+            display:flex;
+            gap:6px;
+            padding:8px;
+            overflow-x:auto;
+            border-bottom:1px solid #222;
         }
+
+        .user {
+            background:#374151;
+            padding:6px 12px;
+            border-radius:20px;
+            font-size:12px;
+            cursor:pointer;
+            white-space:nowrap;
+        }
+
+        /* CHAT */
+        .chat {
+            flex:1;
+            padding:10px;
+            overflow-y:auto;
+            display:flex;
+            flex-direction:column;
+            gap:8px;
+        }
+
+        .msg {
+            padding:10px 14px;
+            border-radius:10px;
+            max-width:80%;
+            word-wrap:break-word;
+        }
+
+        .sent {
+            background:#22c55e;
+            align-self:flex-end;
+        }
+
+        .received {
+            background:#374151;
+            align-self:flex-start;
+        }
+
+        /* INPUT */
+        .input {
+            display:flex;
+            padding:10px;
+            gap:8px;
+            border-top:1px solid #222;
+        }
+
+        .input input {
+            flex:1;
+            padding:10px;
+            border:none;
+            border-radius:8px;
+        }
+
+        .input button {
+            padding:10px 14px;
+            background:#3b82f6;
+            border:none;
+            color:white;
+            border-radius:8px;
+            cursor:pointer;
+        }
+
+        /* MOBILE FIX */
+        @media (max-width: 600px) {
+            .header {
+                flex-direction:column;
+            }
+
+            .header button {
+                width:100%;
+            }
+        }
+
     </style>
 </head>
+
 <body>
 
-<h2>👥 Connected Users (Max 5)</h2>
+<div class="app">
 
-<table>
-    <thead>
-        <tr><th>Users</th></tr>
-    </thead>
-    <tbody id="userTable"></tbody>
-</table>
+    <div class="header">
+        <input id="username" placeholder="Your name">
+        <input id="target" placeholder="Send to (click user below)">
+        <button onclick="connect()">Connect</button>
+    </div>
 
-<ul id="chat"></ul>
+    <div id="users" class="users"></div>
 
-<div>
-    <input id="username" placeholder="Your name"><br>
-    <input id="target" placeholder="Send to (username)"><br>
-    <input id="message" placeholder="Message"><br>
+    <div id="chat" class="chat"></div>
 
-    <button onclick="connect()">Connect</button>
-    <button onclick="sendMessage()">Send</button>
+    <div class="input">
+        <input id="message" placeholder="Message">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+
 </div>
 
 <script>
-let ws;
 
-// 🔥 CHANGE THIS EVERY TIME YOU RUN NGROK
-const BASE_URL = "https://lynsey-jolliest-immaturely.ngrok-free.dev";
+let ws;
+const BASE_URL = "https://lynsey-jolliest-immaturely.ngrok-free.dev "; // change if needed
 
 function connect() {
     const username = document.getElementById("username").value;
@@ -86,53 +173,96 @@ function connect() {
 
     ws = new WebSocket(`${BASE_URL}/ws/${username}`);
 
-    ws.onmessage = (event) => {
-        try {
-            const data = JSON.parse(event.data);
+    ws.onopen = () => {
+        alert("Connected");
+    };
 
-            if (data.type === "users") {
-                const table = document.getElementById("userTable");
-                table.innerHTML = "";
-
-                data.users.forEach(user => {
-                    const row = document.createElement("tr");
-                    const cell = document.createElement("td");
-                    cell.textContent = user;
-                    row.appendChild(cell);
-                    table.appendChild(row);
-                });
-            }
-
-        } catch {
-            const li = document.createElement("li");
-            li.textContent = event.data;
-            document.getElementById("chat").appendChild(li);
-        }
+    ws.onerror = () => {
+        alert("Connection error");
     };
 
     ws.onclose = () => {
-        alert("Disconnected or server full");
+        alert("Disconnected");
+    };
+
+    ws.onmessage = (event) => {
+
+        if (event.data === "USERNAME_TAKEN") {
+            alert("Username already exists");
+            return;
+        }
+
+        if (event.data === "SERVER_FULL") {
+            alert("Server full");
+            return;
+        }
+
+        try {
+            const data = JSON.parse(event.data);
+
+            // USER LIST UPDATE
+            if (data.type === "users") {
+                const usersDiv = document.getElementById("users");
+                usersDiv.innerHTML = "";
+
+                data.users.forEach(user => {
+                    const u = document.createElement("div");
+                    u.className = "user";
+                    u.textContent = user;
+
+                    // CLICK USER TO SELECT TARGET
+                    u.onclick = () => {
+                        document.getElementById("target").value = user;
+                    };
+
+                    usersDiv.appendChild(u);
+                });
+            }
+
+            // MESSAGE RECEIVED
+            if (data.type === "message") {
+                addMessage(`${data.from}: ${data.message}`, false);
+            }
+
+        } catch {
+            addMessage(event.data, false);
+        }
     };
 }
 
 function sendMessage() {
+    if (!ws || ws.readyState !== WebSocket.OPEN) {
+        alert("Connect first");
+        return;
+    }
+
     const from = document.getElementById("username").value;
     const to = document.getElementById("target").value;
     const message = document.getElementById("message").value;
 
     if (!to || !message) {
-        alert("Enter target and message");
+        alert("Enter target + message");
         return;
     }
 
-    ws.send(JSON.stringify({
-        from,
-        to,
-        message
-    }));
+    ws.send(JSON.stringify({ from, to, message }));
+
+    addMessage("Me: " + message, true);
 
     document.getElementById("message").value = "";
 }
+
+function addMessage(text, sent) {
+    const chat = document.getElementById("chat");
+
+    const div = document.createElement("div");
+    div.className = "msg " + (sent ? "sent" : "received");
+    div.textContent = text;
+
+    chat.appendChild(div);
+    chat.scrollTop = chat.scrollHeight;
+}
+
 </script>
 
 </body>
