@@ -2,7 +2,6 @@
 <html>
 <head>
     <title>Chat App</title>
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <style>
@@ -30,7 +29,6 @@
             flex-direction:column;
         }
 
-        /* HEADER */
         .header {
             display:flex;
             gap:8px;
@@ -54,7 +52,6 @@
             cursor:pointer;
         }
 
-        /* USERS */
         .users {
             display:flex;
             gap:6px;
@@ -72,7 +69,6 @@
             white-space:nowrap;
         }
 
-        /* CHAT */
         .chat {
             flex:1;
             padding:10px;
@@ -99,7 +95,6 @@
             align-self:flex-start;
         }
 
-        /* INPUT */
         .input {
             display:flex;
             padding:10px;
@@ -123,7 +118,6 @@
             cursor:pointer;
         }
 
-        /* MOBILE FIX */
         @media (max-width: 600px) {
             .header {
                 flex-direction:column;
@@ -133,7 +127,6 @@
                 width:100%;
             }
         }
-
     </style>
 </head>
 
@@ -161,10 +154,12 @@
 <script>
 
 let ws;
-const BASE_URL = "https://lynsey-jolliest-immaturely.ngrok-free.dev "; // change if needed
+
+// ✅ ALWAYS NO SPACE + correct protocol
+const BASE_URL = "wss://lynsey-jolliest-immaturely.ngrok-free.dev";
 
 function connect() {
-    const username = document.getElementById("username").value;
+    const username = document.getElementById("username").value.trim();
 
     if (!username) {
         alert("Enter username");
@@ -174,14 +169,17 @@ function connect() {
     ws = new WebSocket(`${BASE_URL}/ws/${username}`);
 
     ws.onopen = () => {
+        console.log("Connected");
         alert("Connected");
     };
 
-    ws.onerror = () => {
+    ws.onerror = (err) => {
+        console.error("WebSocket error:", err);
         alert("Connection error");
     };
 
-    ws.onclose = () => {
+    ws.onclose = (e) => {
+        console.warn("Disconnected:", e);
         alert("Disconnected");
     };
 
@@ -200,7 +198,7 @@ function connect() {
         try {
             const data = JSON.parse(event.data);
 
-            // USER LIST UPDATE
+            // USERS LIST
             if (data.type === "users") {
                 const usersDiv = document.getElementById("users");
                 usersDiv.innerHTML = "";
@@ -210,7 +208,6 @@ function connect() {
                     u.className = "user";
                     u.textContent = user;
 
-                    // CLICK USER TO SELECT TARGET
                     u.onclick = () => {
                         document.getElementById("target").value = user;
                     };
@@ -219,7 +216,7 @@ function connect() {
                 });
             }
 
-            // MESSAGE RECEIVED
+            // MESSAGE RECEIVE
             if (data.type === "message") {
                 addMessage(`${data.from}: ${data.message}`, false);
             }
@@ -236,9 +233,9 @@ function sendMessage() {
         return;
     }
 
-    const from = document.getElementById("username").value;
-    const to = document.getElementById("target").value;
-    const message = document.getElementById("message").value;
+    const from = document.getElementById("username").value.trim();
+    const to = document.getElementById("target").value.trim();
+    const message = document.getElementById("message").value.trim();
 
     if (!to || !message) {
         alert("Enter target + message");
