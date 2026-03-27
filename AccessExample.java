@@ -85,7 +85,7 @@ public class AccessExample {
                 System.getLogger(AccessExample.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
             }
 
-            String dbURL = "jdbc:ucanaccess://C:/Users/Admin/OneDrive/Documents/ACCOUNT.accdb";
+            String dbURL = "jdbc:ucanaccess://ACCOUNT.accdb";
             Connection conn = DriverManager.getConnection(dbURL);
 
             Scanner sc = new Scanner(System.in);
