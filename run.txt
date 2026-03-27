@@ -1,2 +1,11 @@
-javac -cp ".;lib/*" AccessExample.java
-java -cp ".;lib/*" AccessExample
+1.{
+    this work in same tab only
+    set CLASSPATH=.;lib/*
+    javac AccessExample.java
+    java AccessExample
+}
+or  
+2.{
+    javac -cp ".;lib/*" AccessExample.java
+    java -cp ".;lib/*" AccessExample
+}

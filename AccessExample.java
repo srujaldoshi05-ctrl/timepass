@@ -58,18 +58,19 @@ public class AccessExample {
     public void res(Connection con) {
         try {
             ResultSet rs = con.createStatement().executeQuery("SELECT * FROM A1");
-            System.out.printf(" \n\tid \tname \tsalary");
+            System.out.println("\n\t+----+----------------+----------+");
+            System.out.printf("\t| %-2s | %-14s | %-8s |\n", "ID", "NAME", "SALARY");
+            System.out.println("\t+----+----------------+----------+");
+
             while (rs.next()) {
-                /*
-                 * System.out.println(
-                 * rs.getInt("ID") + " " +
-                 * rs.getString("NAME") + " " +
-                 * rs.getInt("SALARY") + " "
-                 * 
-                 * );
-                 */
-                System.out.printf("\n\t%d \t%s \t%d", rs.getInt("ID"), rs.getString("NAME"), rs.getInt("SALARY"));
+                System.out.printf("\t| %-2d | %-14s | %-8d |\n",
+                        rs.getInt("ID"),
+                        rs.getString("NAME"),
+                        rs.getInt("SALARY"));
             }
+
+            System.out.println("\t+----+----------------+----------+");
+            System.out.println();
         } catch (SQLException e) {
             System.out.println(e);
         }
@@ -94,7 +95,7 @@ public class AccessExample {
             while (true) {
 
                 System.out.println("\n1)Insert\n2)update\n3)delete\n4)display\n5)exit\n");
-                System.out.println("enter number:");
+                System.out.print("enter number:");
                 int n = sc.nextInt();
 
                 switch (n) {
@@ -102,11 +103,11 @@ public class AccessExample {
                     case 1 -> {
                         String sql = "INSERT INTO A1(SALARY,NAME) VALUES(?,?)";
 
-                        System.out.println("name");
+                        System.out.print("enter a name:");
                         sc.nextLine();
                         String name = sc.nextLine();
                         // sc.nextLine();
-                        System.out.println("salary");
+                        System.out.print("enter a salary:");
                         int sa = sc.nextInt();
                         obj.ins(conn, sql, name, sa);
 
@@ -115,13 +116,13 @@ public class AccessExample {
                         obj.res(conn);
 
                         String sql = "UPDATE A1 SET NAME=?,SALARY=? WHERE ID=?";
-                        System.out.println("name");
+                        System.out.print(" update name:");
                         sc.nextLine();
                         String name = sc.nextLine();
                         // sc.nextLine();
-                        System.out.println("salary");
+                        System.out.print("update salary:");
                         int sa = sc.nextInt();
-                        System.out.println("id");
+                        System.out.print("where id:");
                         int id = sc.nextInt();
                         obj.upd(conn, sql, name, sa, id);
 
@@ -130,7 +131,7 @@ public class AccessExample {
                         obj.res(conn);
 
                         String sql = "DELETE FROM A1 WHERE ID=?";
-                        System.out.println("id");
+                        System.out.print("Delete data id:");
                         int id = sc.nextInt();
                         obj.del(conn, sql, id);
                     }
