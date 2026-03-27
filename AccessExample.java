@@ -94,7 +94,7 @@ public class AccessExample {
             while (true) {
 
                 System.out.println("\n1)Insert\n2)update\n3)delete\n4)display\n5)exit\n");
-System.out.println("enter number:");
+                System.out.println("enter number:");
                 int n = sc.nextInt();
 
                 switch (n) {
